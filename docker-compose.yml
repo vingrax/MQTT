@@ -1,0 +1,65 @@
+version: "3.7"
+services:
+  mqtt5:
+    image: eclipse-mosquitto
+    container_name: mqtt5
+    ports:
+      - "1883:1883" # default mqtt port
+      - "9001:9001" # default mqtt port for websockets
+    volumes:
+      - ./config:/mosquitto/config:rw
+      - ./data:/mosquitto/data:rw
+      - ./log:/mosquitto/log:rw
+    networks:
+      - mqtt5-network
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mqtt
+      MONGO_INITDB_ROOT_PASSWORD: mqttpass
+    networks:
+      - mqtt5-network
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - mqtt5-network
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "8000:8000"
+    networks:
+      - mqtt5-network
+
+  mqtt_publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile.mqtt_publisher
+    depends_on:
+      - mqtt5
+    networks:
+      - mqtt5-network
+
+  mqtt_subscriber:
+    build:
+      context: .
+      dockerfile: Dockerfile.mqtt_subscriber
+    depends_on:
+      - mqtt5
+      - mongodb
+      - redis
+    networks:
+      - mqtt5-network
+    
+
+networks:
+  mqtt5-network:
+    name: mqtt5-network
