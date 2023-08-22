@@ -1,18 +1,5 @@
 # MQTT
 Docker Application
-Repository: Host the entire codebase on GitHub.
-
-Docker Compose: Include a docker-compose.yml file that ensures easy system setup. This file should encompass services for the Python apps (MQTT publisher, subscriber, FastAPI application), Mosquitto, MongoDB, and Redis.
-
-File: Your repository should feature a comprehensive file detailing the following:
-
-Instructions for setting up and interacting with the system using the docker-compose command.
-
-A detailed overview of each service is in the docker-compose.yml file.
-
-Insight into the design choices you made and the rationale behind them.
-
-A section discussing challenges encountered during the project's development and the solutions you implemented.
 To run this code
 Steps to run the project with Docker
 
@@ -26,3 +13,7 @@ Steps to run the project with Docker
 mqtt_publisher is used to send mock data.
 mqtt_subscriber is used for receiving the data and saving it to mongodb collection and redis
 app.py then connects to both mongodb and redis containers to retrieve the data upon API request
+
+# Challenges faced
+New to using docker so there was trial and error involed when setting up the application
+TBH everything used except for fastAPI and basic python programing was new and required learning
